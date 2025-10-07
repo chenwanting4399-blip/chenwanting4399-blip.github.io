@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时空胶囊 - 邮件寄给未来的自己</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0c2d6e 0%, #1a4ba1 50%, #0c2d6e 100%);
+            color: #e2e8f0;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            padding: 20px;
+        }
+        
+        /* 简洁背景 */
+        .capsule-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .container {
+            max-width: 500px;
+            width: 100%;
+            margin: 20px auto;
+            background: rgba(12, 45, 110, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        header {
+            background: linear-gradient(135deg, rgba(12, 45, 110, 0.9) 0%, rgba(26, 75, 161, 0.8) 100%);
+            color: #FFD700;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 70%, rgba(255, 215, 0, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 30%, rgba(255, 230, 0, 0.1) 0%, transparent 50%);
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            position: relative;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            position: relative;
+            margin: 0 auto;
+            color: #FFE87C;
+        }
+        
+        .content {
+            padding: 25px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #FFE87C;
+            font-size: 1rem;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 15px;
+            background: rgba(26, 75, 161, 0.5);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+            color: #f1f5f9;
+        }
+        
+        input::placeholder, textarea::placeholder {
+            color: rgba(255, 232, 124, 0.6);
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            border-color: #FFD700;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+            background: rgba(26, 75, 161, 0.7);
+        }
+        
+        textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #FFD700 0%, #FFEC8B 100%);
+            color: #0c2d6e;
+            border: none;
+            padding: 16px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 10px;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.6);
+        }
+        
+        .btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .btn-email {
+            background: linear-gradient(135deg, #FFD700 0%, #FFEC8B 100%);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        }
+        
+        .btn-email:hover {
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.6);
+        }
+        
+        .info-box {
+            background: rgba(26, 75, 161, 0.5);
+            border-left: 5px solid #FFD700;
+            padding: 20px;
+            margin-top: 25px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .info-box h3 {
+            color: #FFE87C;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .info-box p {
+            margin-bottom: 8px;
+            padding-left: 10px;
+            position: relative;
+        }
+        
+        .info-box p::before {
+            content: '•';
+            position: absolute;
+            left: -5px;
+            color: #FFD700;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255, 232, 124, 0.7);
+            font-size: 12px;
+            border-top: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(26, 75, 161, 0.7);
+            border-radius: 15px;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+        
+        .success-message h2 {
+            color: #FFD700;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .success-message p {
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .capsule-icon {
+            display: inline-block;
+            margin-right: 10px;
+            font-size: 1.8rem;
+            vertical-align: middle;
+            color: #FFD700;
+        }
+        
+        .email-icon {
+            color: #FFD700;
+        }
+        
+        .char-count {
+            text-align: right;
+            font-size: 0.8rem;
+            color: rgba(255, 232, 124, 0.7);
+            margin-top: 5px;
+        }
+        
+        .must-logo {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFEC8B 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #0c2d6e;
+            font-size: 18px;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+            border: 2px solid rgba(255, 215, 0, 0.8);
+        }
+        
+        .time-note {
+            font-size: 0.8rem;
+            color: #FFE87C;
+            margin-top: 5px;
+            text-align: center;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                margin: 10px auto;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .subtitle {
+                font-size: 0.9rem;
+            }
+            
+            .content {
+                padding: 20px 15px;
+            }
+            
+            header {
+                padding: 25px 15px;
+            }
+            
+            .capsule-icon {
+                font-size: 1.5rem;
+            }
+            
+            .must-logo {
+                width: 50px;
+                height: 50px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 简洁背景 -->
+    <div class="capsule-bg"></div>
+    
+    <div class="container">
+        <header>
+            <div class="must-logo">MUST</div>
+            <h1><i class="fas fa-capsules capsule-icon"></i> 时空胶囊</h1>
+            <p class="subtitle">邮件寄给未来的自己 · 封存此刻的心意</p>
+        </header>
+        
+        <div class="content">
+            <div class="form-group">
+                <label for="email"><i class="fas fa-envelope email-icon"></i> 邮箱地址</label>
+                <input type="email" id="email" placeholder="请输入您的邮箱地址">
+            </div>
+            
+            <div class="form-group">
+                <label for="sendDate"><i class="fas fa-clock"></i> 发送日期</label>
+                <input type="date" id="sendDate">
+                <div class="time-note">邮件将在选定日期的早上10:00发送</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="message"><i class="fas fa-envelope-open-text email-icon"></i> 邮件内容</label>
+                <textarea id="message" placeholder="在这里写下您想对未来的自己说的话..." maxlength="2000"></textarea>
+                <div class="char-count"><span id="charCount">0</span>/2000</div>
+            </div>
+            
+            <button class="btn btn-email" id="submitBtn">
+                <i class="fas fa-time-capsule"></i> 封存时空胶囊
+            </button>
+            
+            <div class="success-message" id="successMessage">
+                <h2><i class="fas fa-check-circle"></i> 时空胶囊已封存！</h2>
+                <p>我们已收到您的时空胶囊，将在您设定的日期早上10:00通过邮件发送到您的邮箱。</p>
+                <p>请妥善保管您的邮箱，等待未来的惊喜！</p>
+            </div>
+            
+            <div class="info-box">
+                <h3><i class="fas fa-info-circle"></i> 如何使用？</h3>
+                <p>输入您的邮箱地址</p>
+                <p>选择您希望接收邮件的日期</p>
+                <p>写下您想对未来的自己说的话</p>
+                <p>点击封存时空胶囊</p>
+                <p>在设定的时间，您将收到这封来自过去的邮件</p>
+            </div>
+        </div>
+        
+        <footer>
+            <p>时空胶囊 &copy; 2023 · 通过邮件连接现在与未来</p>
+        </footer>
+    </div>
+
+    <script>
+        // 字符计数
+        document.getElementById('message').addEventListener('input', function() {
+            const count = this.value.length;
+            document.getElementById('charCount').textContent = count;
+        });
+        
+        // 表单提交处理
+        document.getElementById('submitBtn').addEventListener('click', function() {
+            const email = document.getElementById('email').value;
+            const sendDate = document.getElementById('sendDate').value;
+            const message = document.getElementById('message').value;
+            
+            // 简单验证
+            if (!email || !sendDate || !message) {
+                alert('请填写所有字段！');
+                return;
+            }
+            
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                alert('请输入有效的邮箱地址！');
+                return;
+            }
+            
+            // 检查发送日期是否在2027年之后
+            const selectedDate = new Date(sendDate);
+            const minDate = new Date('2027-01-01');
+            if (selectedDate < minDate) {
+                alert('发送日期必须从2027年开始！');
+                return;
+            }
+            
+            // 显示成功消息
+            document.getElementById('successMessage').style.display = 'block';
+            
+            // 滚动到成功消息
+            document.getElementById('successMessage').scrollIntoView({ behavior: 'smooth' });
+            
+            // 在实际应用中，这里应该将数据保存到数据库
+            console.log('时空胶囊已保存:', { email, sendDate: sendDate + 'T10:00', message });
+        });
+        
+        // 设置默认的发送日期为2027年1月1日
+        const futureDate = new Date('2027-01-01');
+        document.getElementById('sendDate').value = futureDate.toISOString().slice(0, 10);
+        
+        // 设置最小日期为2027年
+        document.getElementById('sendDate').min = '2027-01-01';
+    </script>
+</body>
+</html>
